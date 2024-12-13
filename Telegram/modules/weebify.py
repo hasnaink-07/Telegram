@@ -59,7 +59,8 @@ weebyfont = [
     "乙",
 ]
 
-@zaid(command='weebify')
+
+@zaid(command="weebify")
 def weebify(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message

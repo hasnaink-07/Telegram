@@ -9,31 +9,26 @@ from PIL import Image
 from yt_dlp import YoutubeDL
 from typing import Optional, Union
 from Telegram import telethn as bot
+
 LOGS = {}
 SUDO_USERS = {}
 
 from telethon.tl.functions.channels import GetParticipantRequest
-from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator, DocumentAttributeFilename
-
-
+from telethon.tl.types import (
+    ChannelParticipantAdmin,
+    ChannelParticipantCreator,
+    DocumentAttributeFilename,
+)
 
 
 async def is_admin(chat_id, user_id):
-    req_jo = await bot(GetParticipantRequest(
-        channel=chat_id,
-        user_id=user_id
-    ))
+    req_jo = await bot(GetParticipantRequest(channel=chat_id, user_id=user_id))
     chat_participant = req_jo.participant
-    if isinstance(
-            chat_participant,
-            ChannelParticipantCreator) or isinstance(
-            chat_participant,
-            ChannelParticipantAdmin):
+    if isinstance(chat_participant, ChannelParticipantCreator) or isinstance(
+        chat_participant, ChannelParticipantAdmin
+    ):
         return True
     return False
-
-
-
 
 
 # https://github.com/TeamUltroid/pyUltroid/blob/31c271cf4d35ab700e5880e952e54c82046812c2/pyUltroid/functions/helper.py#L154

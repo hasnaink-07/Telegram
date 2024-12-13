@@ -18,7 +18,7 @@ from telegram.ext import CallbackContext
 from Telegram.modules.helper_funcs.decorators import zaid
 
 
-@zaid(command='load')
+@zaid(command="load")
 @dev_plus
 def load(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -83,7 +83,8 @@ def load(update: Update, context: CallbackContext):
         "Successfully loaded module : <b>{}</b>".format(text), parse_mode=ParseMode.HTML
     )
 
-@zaid(command='unload')
+
+@zaid(command="unload")
 @dev_plus
 def unload(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -150,7 +151,7 @@ def unload(update: Update, context: CallbackContext):
     )
 
 
-@zaid(command='listmodules')
+@zaid(command="listmodules")
 @sudo_plus
 def listmodules(update: Update, context: CallbackContext):
     message = update.effective_message

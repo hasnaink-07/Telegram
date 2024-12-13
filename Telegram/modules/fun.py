@@ -15,12 +15,12 @@ from Telegram.modules.helper_funcs.extraction import extract_user
 from Telegram.modules.helper_funcs.decorators import zaid
 
 
-@zaid(command='runs')
+@zaid(command="runs")
 def runs(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.RUN_STRINGS))
 
 
-@zaid(command='slap')
+@zaid(command="slap")
 def slap(update: Update, context: CallbackContext):
     bot: telegram.Bot = context.bot
     args = context.args
@@ -33,8 +33,11 @@ def slap(update: Update, context: CallbackContext):
         else message.reply_text
     )
 
-    curr_user = html.escape(message.from_user.first_name) if not message.sender_chat else html.escape(
-        message.sender_chat.title)
+    curr_user = (
+        html.escape(message.from_user.first_name)
+        if not message.sender_chat
+        else html.escape(message.sender_chat.title)
+    )
     user_id = extract_user(message, args)
 
     if user_id == bot.id:
@@ -62,7 +65,9 @@ def slap(update: Update, context: CallbackContext):
 
         slapped_user = bot.get_chat(user_id)
         user1 = curr_user
-        user2 = html.escape(slapped_user.first_name if slapped_user.first_name else slapped_user.title)
+        user2 = html.escape(
+            slapped_user.first_name if slapped_user.first_name else slapped_user.title
+        )
 
     else:
         user1 = bot.first_name
@@ -77,7 +82,7 @@ def slap(update: Update, context: CallbackContext):
     reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@zaid(command='pat')
+@zaid(command="pat")
 def pat(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = str(update.message.text)
@@ -97,12 +102,12 @@ def pat(update: Update, context: CallbackContext):
                 "http://headp.at/js/pats.json",
                 headers={
                     "User-Agent": "Mozilla/5.0 (X11; U; Linux i686) "
-                                  "Gecko/20071127 Firefox/2.0.0.11"
+                    "Gecko/20071127 Firefox/2.0.0.11"
                 },
             )
         )
-            .read()
-            .decode("utf-8")
+        .read()
+        .decode("utf-8")
     )
     if "@" in msg and len(msg) > 5:
         context.bot.send_photo(
@@ -118,17 +123,17 @@ def pat(update: Update, context: CallbackContext):
         )
 
 
-@zaid(command='roll')
+@zaid(command="roll")
 def roll(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(range(1, 7)))
 
 
-@zaid(command='toss')
+@zaid(command="toss")
 def toss(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(fun_strings.TOSS))
 
 
-@zaid(command='shrug')
+@zaid(command="shrug")
 def shrug(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
@@ -137,7 +142,7 @@ def shrug(update: Update, context: CallbackContext):
     reply_text(r"¯\_(ツ)_/¯")
 
 
-@zaid(command='rlg')
+@zaid(command="rlg")
 def rlg(update: Update, context: CallbackContext):
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
@@ -150,7 +155,7 @@ def rlg(update: Update, context: CallbackContext):
     update.message.reply_text(repl)
 
 
-@zaid(command='decide')
+@zaid(command="decide")
 def decide(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
@@ -160,7 +165,7 @@ def decide(update: Update, context: CallbackContext):
     reply_text(random.choice(fun_strings.DECIDE))
 
 
-@zaid(command='table')
+@zaid(command="table")
 def table(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text

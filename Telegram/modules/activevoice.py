@@ -7,9 +7,7 @@ from Telegram.helpers.queues import get_active_chats
 
 @Zaid.on(events.NewMessage(pattern="^/activevoice"))
 async def activevc(message):
-    mystic = await message.reply(
-        "Getting active voice chats.. Please hold"
-    )
+    mystic = await message.reply("Getting active voice chats.. Please hold")
     served_chats = await get_active_chats()
     text = ""
     j = 0
@@ -27,6 +25,4 @@ async def activevc(message):
     if not text:
         await mystic.edit("No Active Voice Chats")
     else:
-        await mystic.edit(
-            f"**Active Voice Chats:-**\n\n{text}"
-        )
+        await mystic.edit(f"**Active Voice Chats:-**\n\n{text}")

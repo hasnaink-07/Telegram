@@ -10,7 +10,7 @@ def convert(speed):
     return round(int(speed) / 1048576, 2)
 
 
-@zaid(command='speedtest')
+@zaid(command="speedtest")
 @dev_plus
 def speedtestxyz(update: Update, context: CallbackContext):
     buttons = [

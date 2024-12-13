@@ -12,10 +12,11 @@ import math
 import time
 from Telegram.modules.helper_funcs.decorators import zaid
 
+
 def shorten(description, info="anilist.co"):
     msg = ""
     if len(description) > 700:
-        description = f'{description[:500]}....'
+        description = f"{description[:500]}...."
         msg += f"\n*Description*: _{description}_[Read More]({info})"
     else:
         msg += f"\n*Description*:_{description}_"
@@ -36,11 +37,11 @@ def t(milliseconds: int) -> str:
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     tmp = (
-        (f'{str(days)} Days, ' if days else "")
-        + (f'{str(hours)} Hours, ' if hours else "")
-        + (f'{str(minutes)} Minutes, ' if minutes else "")
-        + (f'{str(seconds)} Seconds, ' if seconds else "")
-        + (f'{str(milliseconds)} ms, ' if milliseconds else "")
+        (f"{str(days)} Days, " if days else "")
+        + (f"{str(hours)} Hours, " if hours else "")
+        + (f"{str(minutes)} Minutes, " if minutes else "")
+        + (f"{str(seconds)} Seconds, " if seconds else "")
+        + (f"{str(milliseconds)} ms, " if milliseconds else "")
     )
 
     return tmp[:-2]
@@ -159,6 +160,7 @@ query ($id: Int,$search: String) {
 
 url = "https://graphql.anilist.co"
 
+
 @zaid(command="airing")
 def airing(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -180,6 +182,7 @@ def airing(update: Update, context: CallbackContext):
     else:
         msg += f"\n*Episode*:{response['episodes']}\n*Status*: `N/A`"
     update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+
 
 @zaid(command="anime")
 def anime(update: Update, context: CallbackContext):  # sourcery no-metrics
@@ -215,9 +218,9 @@ def anime(update: Update, context: CallbackContext):  # sourcery no-metrics
             site = trailer.get("site", None)
             if site == "youtube":
                 trailer = f"https://youtu.be/{trailer_id}"
-        description = (
-           bs4.BeautifulSoup(json.get("description", "N/A"), features='html.parser').text
-        )
+        description = bs4.BeautifulSoup(
+            json.get("description", "N/A"), features="html.parser"
+        ).text
         msg += shorten(description, info)
         image = json.get("bannerImage", None)
         if trailer:
@@ -251,6 +254,7 @@ def anime(update: Update, context: CallbackContext):  # sourcery no-metrics
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
 
+
 @zaid(command="character")
 def character(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -269,7 +273,9 @@ def character(update: Update, context: CallbackContext):
     if json:
         json = json["data"]["Character"]
         msg = f"*{json.get('name').get('full')}*(`{json.get('name').get('native')}`)\n"
-        description = bs4.BeautifulSoup(f"{json['description']}", features='html.parser').text
+        description = bs4.BeautifulSoup(
+            f"{json['description']}", features="html.parser"
+        ).text
         site_url = json.get("siteUrl")
         msg += shorten(description, site_url)
         image = json.get("image", None)
@@ -284,6 +290,7 @@ def character(update: Update, context: CallbackContext):
             update.effective_message.reply_text(
                 msg.replace("<b>", "</b>"), parse_mode=ParseMode.MARKDOWN
             )
+
 
 @zaid(command="manga")
 def manga(update: Update, context: CallbackContext):
@@ -353,4 +360,3 @@ def manga(update: Update, context: CallbackContext):
 
 
 from Telegram.modules.language import gs
-

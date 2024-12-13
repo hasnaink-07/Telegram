@@ -57,7 +57,9 @@ from Telegram.modules.helper_funcs.decorators import zaid, zaidcallback
 #
 # Total spended for making this features is 68+ hours
 
-log.info("Original federation module by MrYacha, reworked by Mizukito Akito (@peaktogoo) on Telegram.")
+log.info(
+    "Original federation module by MrYacha, reworked by Mizukito Akito (@peaktogoo) on Telegram."
+)
 
 # TODO: Fix Loads of code duplication
 
@@ -90,7 +92,7 @@ UNFBAN_ERRORS = {
 
 
 @typing_action
-@zaid(command='newfed')
+@zaid(command="newfed")
 def new_fed(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -143,7 +145,7 @@ def new_fed(update, context):
 
 
 @typing_action
-@zaid(command='delfed', pass_args=True)
+@zaid(command="delfed", pass_args=True)
 def del_fed(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -191,7 +193,7 @@ def del_fed(update, context):
 
 
 @typing_action
-@zaid(command='chatfed', pass_args=True)
+@zaid(command="chatfed", pass_args=True)
 def fed_chat(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     fed_id = sql.get_fed_id(chat.id)
@@ -217,7 +219,7 @@ def fed_chat(update, context):
 
 
 @typing_action
-@zaid(command='joinfed', pass_args=True)
+@zaid(command="joinfed", pass_args=True)
 def join_fed(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -279,7 +281,7 @@ def join_fed(update, context):
 
 
 @typing_action
-@zaid(command='leavefed')
+@zaid(command="leavefed")
 def leave_fed(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -321,7 +323,7 @@ def leave_fed(update, context):
 
 
 @typing_action
-@zaid(command='fpromote', pass_args=True)
+@zaid(command="fpromote", pass_args=True)
 def user_join_fed(update, context):
     chat = update.effective_chat
     user = update.effective_user
@@ -386,7 +388,7 @@ def user_join_fed(update, context):
 
 
 @typing_action
-@zaid(command='fdemote', pass_args=True)
+@zaid(command="fdemote", pass_args=True)
 def user_demote_fed(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -447,7 +449,7 @@ def user_demote_fed(update, context):
 
 
 @typing_action
-@zaid(command='fedinfo', pass_args=True)
+@zaid(command="fedinfo", pass_args=True)
 def fed_info(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -496,7 +498,7 @@ def fed_info(update, context):
 
 
 @typing_action
-@zaid(command='fedadmins', pass_args=True)
+@zaid(command="fedadmins", pass_args=True)
 def fed_admin(update, context):
 
     chat = update.effective_chat  # type: Optional[Chat]
@@ -530,7 +532,7 @@ def fed_admin(update, context):
     try:
         owner_name = owner.first_name + " " + owner.last_name
     except BaseException:
-        owner_name = owner.first_name or 'Deleted'
+        owner_name = owner.first_name or "Deleted"
     text += " • {}\n".format(mention_html(owner.id, owner_name))
 
     members = sql.all_fed_members(fed_id)
@@ -540,14 +542,14 @@ def fed_admin(update, context):
         text += "\n🔱 Admin:\n"
         for x in members:
             user = context.bot.get_chat(x)
-            name = user.first_name or 'Deleted'
+            name = user.first_name or "Deleted"
             text += " • {}\n".format(mention_html(user.id, user.first_name))
 
     update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
 @typing_action
-@zaid(command=['fban', 'fedban'], pass_args=True)
+@zaid(command=["fban", "fedban"], pass_args=True)
 def fed_ban(update, context):  # sourcery no-metrics
 
     chat = update.effective_chat  # type: Optional[Chat]
@@ -694,13 +696,13 @@ def fed_ban(update, context):  # sourcery no-metrics
                 "\n<b>Federation Admin:</b> {}"
                 "\n<b>User:</b> {}"
                 "\n<b>User ID:</b> <code>{}</code>"
-		"\n<b>Initiated From:</b> <code>{}</code>"
+                "\n<b>Initiated From:</b> <code>{}</code>"
                 "\n<b>Reason:</b> {}".format(
                     fed_name,
                     mention_html(user.id, user.first_name),
                     user_target,
                     fban_user_id,
-		    message.chat.title,
+                    message.chat.title,
                     reason,
                 ),
                 parse_mode="HTML",
@@ -716,13 +718,13 @@ def fed_ban(update, context):  # sourcery no-metrics
                     "\n<b>Federation Admin:</b> {}"
                     "\n<b>User:</b> {}"
                     "\n<b>User ID:</b> <code>{}</code>"
-		    "\n<b>Initiated From:</b> <code>{}</code>"
+                    "\n<b>Initiated From:</b> <code>{}</code>"
                     "\n<b>Reason:</b> {}".format(
                         fed_name,
                         mention_html(user.id, user.first_name),
                         user_target,
                         fban_user_id,
-			message.chat.title,
+                        message.chat.title,
                         reason,
                     ),
                     parse_mode="HTML",
@@ -854,13 +856,13 @@ def fed_ban(update, context):  # sourcery no-metrics
             "\n<b>Federation Admin:</b> {}"
             "\n<b>User:</b> {}"
             "\n<b>User ID:</b> <code>{}</code>"
-	    "\n<b>Initiated From:</b> <code>{}</code>"
+            "\n<b>Initiated From:</b> <code>{}</code>"
             "\n<b>Reason:</b> {}".format(
                 fed_name,
                 mention_html(user.id, user.first_name),
                 user_target,
                 fban_user_id,
-		message.chat.title,
+                message.chat.title,
                 reason,
             ),
             parse_mode="HTML",
@@ -876,13 +878,13 @@ def fed_ban(update, context):  # sourcery no-metrics
                 "\n<b>Federation Admin:</b> {}"
                 "\n<b>User:</b> {}"
                 "\n<b>User ID:</b> <code>{}</code>"
-		"\n<b>Initiated From:</b> <code>{}</code>"
+                "\n<b>Initiated From:</b> <code>{}</code>"
                 "\n<b>Reason:</b> {}".format(
                     fed_name,
                     mention_html(user.id, user.first_name),
                     user_target,
                     fban_user_id,
-		    message.chat.title,
+                    message.chat.title,
                     reason,
                 ),
                 parse_mode="HTML",
@@ -966,7 +968,7 @@ def fed_ban(update, context):  # sourcery no-metrics
 
 
 @typing_action
-@zaid(command=['unfban', 'rmfedban'], pass_args=True)
+@zaid(command=["unfban", "rmfedban"], pass_args=True)
 def unfban(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1063,12 +1065,12 @@ def unfban(update, context):
             "\n<b>Federation Admin:</b> {}"
             "\n<b>User:</b> {}"
             "\n<b>User ID:</b> <code>{}</code>"
-	    "\n<b>Initiated From:</b> <code>{}</code>".format(
+            "\n<b>Initiated From:</b> <code>{}</code>".format(
                 info["fname"],
                 mention_html(user.id, user.first_name),
                 user_target,
                 fban_user_id,
-		message.chat.title,
+                message.chat.title,
             ),
             parse_mode="HTML",
         )
@@ -1083,12 +1085,12 @@ def unfban(update, context):
                 "\n<b>Federation Admin:</b> {}"
                 "\n<b>User:</b> {}"
                 "\n<b>User ID:</b> <code>{}</code>"
-		"\n<b>Initiated From:</b> <code>{}</code>".format(
+                "\n<b>Initiated From:</b> <code>{}</code>".format(
                     info["fname"],
                     mention_html(user.id, user.first_name),
                     user_target,
                     fban_user_id,
-		    message.chat.title,
+                    message.chat.title,
                 ),
                 parse_mode="HTML",
             )
@@ -1250,7 +1252,7 @@ def set_frules(update, context):
 
 
 @typing_action
-@zaid(command='frules', pass_args=True)
+@zaid(command="frules", pass_args=True)
 def get_frules(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     args = context.args
@@ -1274,7 +1276,7 @@ def get_frules(update, context):
 
 
 @typing_action
-@zaid(command='fbroadcast', pass_args=True)
+@zaid(command="fbroadcast", pass_args=True)
 def fed_broadcast(update, context):
     msg = update.effective_message  # type: Optional[Message]
     user = update.effective_user  # type: Optional[User]
@@ -1334,7 +1336,7 @@ def fed_broadcast(update, context):
 
 
 @send_action(ChatAction.UPLOAD_DOCUMENT)
-@zaid(command='fbanlist', pass_args=True, pass_chat_data=True)
+@zaid(command="fbanlist", pass_args=True, pass_chat_data=True)
 def fed_ban_list(update, context):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1514,7 +1516,7 @@ def fed_ban_list(update, context):  # sourcery no-metrics
 
 
 @typing_action
-@zaid(command='fednotif', pass_args=True)
+@zaid(command="fednotif", pass_args=True)
 def fed_notif(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1550,7 +1552,7 @@ def fed_notif(update, context):
 
 
 @typing_action
-@zaid(command='fedchats', pass_args=True)
+@zaid(command="fedchats", pass_args=True)
 def fed_chats(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1615,7 +1617,7 @@ def fed_chats(update, context):
 
 
 @typing_action
-@zaid(command='importfbans', pass_args=True, pass_chat_data=True)
+@zaid(command="importfbans", pass_args=True, pass_chat_data=True)
 def fed_import_bans(update, context):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1859,7 +1861,7 @@ def del_fed_button(update, context):
 
 
 @typing_action
-@zaid(command='fbanstat', pass_args=True)
+@zaid(command="fbanstat", pass_args=True)
 def fed_stat_user(update, context):  # sourcery no-metrics
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -1968,7 +1970,7 @@ def fed_stat_user(update, context):  # sourcery no-metrics
 
 
 @typing_action
-@zaid(command='setfedlog', pass_args=True)
+@zaid(command="setfedlog", pass_args=True)
 def set_fed_log(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2010,7 +2012,7 @@ def set_fed_log(update, context):
 
 
 @typing_action
-@zaid(command='unsetfedlog', pass_args=True)
+@zaid(command="unsetfedlog", pass_args=True)
 def unset_fed_log(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2053,7 +2055,7 @@ def unset_fed_log(update, context):
 
 
 @typing_action
-@zaid('subfed', pass_args=True)
+@zaid("subfed", pass_args=True)
 def subs_feds(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2120,7 +2122,7 @@ def subs_feds(update, context):
 
 
 @typing_action
-@zaid(command='unsubfed', pass_args=True)
+@zaid(command="unsubfed", pass_args=True)
 def unsubs_feds(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2187,7 +2189,7 @@ def unsubs_feds(update, context):
 
 
 @typing_action
-@zaid(command='fedsubs', pass_args=True)
+@zaid(command="fedsubs", pass_args=True)
 def get_myfedsubs(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2236,7 +2238,7 @@ def get_myfedsubs(update, context):
 
 
 @typing_action
-@zaid(command='myfeds', pass_args=True)
+@zaid(command="myfeds", pass_args=True)
 def get_myfeds_list(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2354,6 +2356,7 @@ __mod_name__ = "Federations"
 
 from Telegram.modules.language import gs
 
+
 def fed_owner_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         gs(update.effective_chat.id, "FED_OWNER_HELP"),
@@ -2366,7 +2369,6 @@ def fed_admin_help(update: Update, context: CallbackContext):
         gs(update.effective_chat.id, "FED_ADMIN_HELP"),
         parse_mode=ParseMode.MARKDOWN,
     )
-
 
 
 def fed_user_help(update: Update, context: CallbackContext):
@@ -2386,24 +2388,30 @@ def fed_help(update: Update, context: CallbackContext):
     elif help_info == "admin":
         help_text = gs(update.effective_chat.id, "FED_ADMIN_HELP")
     elif help_info == "user":
-        help_text = gs(update.effective_chat.id, "FED_USER_HELP") 
+        help_text = gs(update.effective_chat.id, "FED_USER_HELP")
     query.message.edit_text(
         text=help_text,
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="Back", callback_data=f"help_module({__mod_name__.lower()})")]]
+            [
+                [
+                    InlineKeyboardButton(
+                        text="Back",
+                        callback_data=f"help_module({__mod_name__.lower()})",
+                    )
+                ]
+            ]
         ),
     )
     bot.answer_callback_query(query.id)
 
 
 def get_help(chat):
-    return [gs(chat, "feds_help"),
-    [
-        InlineKeyboardButton(text="Fedadmins", callback_data="fed_help_admin"),
-        InlineKeyboardButton(text="Fedowners", callback_data="fed_help_owner")
-    ],
-    [
-        InlineKeyboardButton(text="Users", callback_data="fed_help_user")
-    ],
-]
+    return [
+        gs(chat, "feds_help"),
+        [
+            InlineKeyboardButton(text="Fedadmins", callback_data="fed_help_admin"),
+            InlineKeyboardButton(text="Fedowners", callback_data="fed_help_owner"),
+        ],
+        [InlineKeyboardButton(text="Users", callback_data="fed_help_user")],
+    ]

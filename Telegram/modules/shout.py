@@ -3,7 +3,8 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from Telegram.modules.helper_funcs.decorators import zaid
 
-@zaid(command='shout')
+
+@zaid(command="shout")
 def shout(update: Update, context: CallbackContext):
     args = context.args
     text = " ".join(args)

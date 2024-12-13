@@ -270,9 +270,9 @@ def pin(update: Update, context: CallbackContext) -> str:
     is_silent = True
     if len(args) >= 1:
         is_silent = (
-                args[0].lower() != "notify"
-                or args[0].lower() == "loud"
-                or args[0].lower() == "violent"
+            args[0].lower() != "notify"
+            or args[0].lower() == "loud"
+            or args[0].lower() == "violent"
         )
 
     if prev_message and is_group:
@@ -354,9 +354,12 @@ def adminlist(update: Update, _):
         if not admin.is_anonymous:
             user = admin.user
             name = user.mention_markdown()
-            text += "\n -> {} • `{}` • `{}` • `{}`".format(name, user.id, admin.status,
-                                                           escape_markdown(
-                                                               admin.custom_title) if admin.custom_title else "")
+            text += "\n -> {} • `{}` • `{}` • `{}`".format(
+                name,
+                user.id,
+                admin.status,
+                escape_markdown(admin.custom_title) if admin.custom_title else "",
+            )
 
     update.effective_message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 

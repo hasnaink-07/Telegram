@@ -15,27 +15,35 @@ from telethon.sessions import StringSession
 from telethon.sessions import MemorySession
 from config import Config
 from pytgcalls import PyTgCalls
+
 StartTime = time.time()
 
 
 flag = """💖"""
 
+
 def get_user_list(key):
     # Import here to evade a circular import
     from Telegram.modules.sql import nation_sql
+
     royals = nation_sql.get_royals(key)
     return [a.user_id for a in royals]
 
+
 # enable logging
 
-fileConfig('logging.ini')
+fileConfig("logging.ini")
 
-#print(flag)
-log = logging.getLogger('[Telethon]')
-logging.getLogger('ptbcontrib.postgres_persistence.postgrespersistence').setLevel(logging.WARNING)
+# print(flag)
+log = logging.getLogger("[Telethon]")
+logging.getLogger("ptbcontrib.postgres_persistence.postgrespersistence").setLevel(
+    logging.WARNING
+)
 log.info("[TELEGRAM] Bot is starting. | An Telethon Project. | Licensed under GPLv3.")
 log.info("[TELEGRAM] Not affiliated to Azur Lane or Yostar in any way whatsoever.")
-log.info("[TELEGRAM] Project maintained by: github.com/ITZ-ZAID (t.me/Timesisnotwaiting)")
+log.info(
+    "[TELEGRAM] Project maintained by: github.com/ITZ-ZAID (t.me/Timesisnotwaiting)"
+)
 
 # if version < 3.6, stop bot.
 if sys.version_info[0] < 3 or sys.version_info[1] < 7:
@@ -48,47 +56,51 @@ parser = ConfigParser()
 parser.read("config.ini")
 zconfig = parser["zaidconfig"]
 
+
 class AnieINIT:
     def __init__(self, parser: ConfigParser):
         self.parser = parser
-        self.SYS_ADMIN: int = self.parser.getint('SYS_ADMIN', 0)
-        self.OWNER_ID: int = self.parser.getint('OWNER_ID')
-        self.STRING_SESSION: str = self.parser.get("STRING_SESSION") 
-        self.OWNER_USERNAME: str = self.parser.get('OWNER_USERNAME', None)
+        self.SYS_ADMIN: int = self.parser.getint("SYS_ADMIN", 0)
+        self.OWNER_ID: int = self.parser.getint("OWNER_ID")
+        self.STRING_SESSION: str = self.parser.get("STRING_SESSION")
+        self.OWNER_USERNAME: str = self.parser.get("OWNER_USERNAME", None)
         self.APP_ID: str = self.parser.getint("APP_ID")
         self.API_HASH: str = self.parser.get("API_HASH")
-        self.WEBHOOK: bool = self.parser.getboolean('WEBHOOK', False)
-        self.URL: str = self.parser.get('URL', None)
-        self.CERT_PATH: str = self.parser.get('CERT_PATH', None)
-        self.PORT: int = self.parser.getint('PORT', None)
-        self.INFOPIC: bool = self.parser.getboolean('INFOPIC', True)
+        self.WEBHOOK: bool = self.parser.getboolean("WEBHOOK", False)
+        self.URL: str = self.parser.get("URL", None)
+        self.CERT_PATH: str = self.parser.get("CERT_PATH", None)
+        self.PORT: int = self.parser.getint("PORT", None)
+        self.INFOPIC: bool = self.parser.getboolean("INFOPIC", True)
         self.DEL_CMDS: bool = self.parser.getboolean("DEL_CMDS", False)
         self.STRICT_GBAN: bool = self.parser.getboolean("STRICT_GBAN", False)
         self.ALLOW_EXCL: bool = self.parser.getboolean("ALLOW_EXCL", False)
-        self.CUSTOM_CMD: List[str] = ['/', '!']
+        self.CUSTOM_CMD: List[str] = ["/", "!"]
         self.BAN_STICKER: str = self.parser.get("BAN_STICKER", True)
         self.TOKEN: str = self.parser.get("TOKEN")
         self.DB_URI: str = self.parser.get("SQLALCHEMY_DATABASE_URI")
         self.LOAD = self.parser.get("LOAD").split()
         self.LOAD: List[str] = list(map(str, self.LOAD))
-        self.MESSAGE_DUMP: int = self.parser.getint('MESSAGE_DUMP', None)
-        self.GBAN_LOGS: int = self.parser.getint('GBAN_LOGS', None)
+        self.MESSAGE_DUMP: int = self.parser.getint("MESSAGE_DUMP", None)
+        self.GBAN_LOGS: int = self.parser.getint("GBAN_LOGS", None)
         self.NO_LOAD = self.parser.get("NO_LOAD").split()
         self.NO_LOAD: List[str] = list(map(str, self.NO_LOAD))
-        self.spamwatch_api: str = self.parser.get('spamwatch_api', None)
-        self.CASH_API_KEY: str = self.parser.get('CASH_API_KEY', None)
-        self.TIME_API_KEY: str = self.parser.get('TIME_API_KEY', None)
-        self.WALL_API: str = self.parser.get('WALL_API', None)
-        self.LASTFM_API_KEY: str = self.parser.get('LASTFM_API_KEY', None)
-        self.CF_API_KEY: str =  self.parser.get("CF_API_KEY", None)
-        self.bot_id = 0 #placeholder
-        self.bot_name = "Anie" #placeholder
-        self.bot_username = "AnieRobot_bot" #placeholder
+        self.spamwatch_api: str = self.parser.get("spamwatch_api", None)
+        self.CASH_API_KEY: str = self.parser.get("CASH_API_KEY", None)
+        self.TIME_API_KEY: str = self.parser.get("TIME_API_KEY", None)
+        self.WALL_API: str = self.parser.get("WALL_API", None)
+        self.LASTFM_API_KEY: str = self.parser.get("LASTFM_API_KEY", None)
+        self.CF_API_KEY: str = self.parser.get("CF_API_KEY", None)
+        self.bot_id = 0  # placeholder
+        self.bot_name = "Anie"  # placeholder
+        self.bot_username = "AnieRobot_bot"  # placeholder
         self.DEBUG: bool = self.parser.getboolean("IS_DEBUG", False)
         self.DROP_UPDATES: bool = self.parser.getboolean("DROP_UPDATES", True)
-        self.BOT_API_URL: str = self.parser.get('BOT_API_URL', "https://api.telegram.org/bot")
-        self.BOT_API_FILE_URL: str = self.parser.get('BOT_API_FILE_URL', "https://api.telegram.org/file/bot")
-
+        self.BOT_API_URL: str = self.parser.get(
+            "BOT_API_URL", "https://api.telegram.org/bot"
+        )
+        self.BOT_API_FILE_URL: str = self.parser.get(
+            "BOT_API_FILE_URL", "https://api.telegram.org/file/bot"
+        )
 
     def init_sw():
         if Config.spamwatch_api is None:
@@ -143,8 +155,8 @@ CF_API_KEY = ZInit.CF_API_KEY
 # SpamWatch
 sw = ZZInit.init_sw()
 
-API_HASH = '4e984ea35f854762dcde906dce426c2d'
-API_ID = '6435225'
+API_HASH = "4e984ea35f854762dcde906dce426c2d"
+API_ID = "6435225"
 STRING_SESSION = ZInit.STRING_SESSION
 WORKERS = 8
 ASSISTANT_ID = ZInit.ASSISTANT_ID
@@ -154,9 +166,9 @@ from Telegram.modules.sql import SESSION
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
 telethn = TelegramClient(MemorySession(), APP_ID, API_HASH)
 if STRING_SESSION:
-   ubot2 = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
-else: 
-   ubot2 = None
+    ubot2 = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
+else:
+    ubot2 = None
 
 client = ubot2
 call_py = PyTgCalls(ubot2)
@@ -164,11 +176,12 @@ try:
     ubot2.start()
     call_py.start()
 except BaseException:
-    print("WARNING ⚠️ ! Have you added a STRING_SESSION in deploying?? Some modules are affect")
+    print(
+        "WARNING ⚠️ ! Have you added a STRING_SESSION in deploying?? Some modules are affect"
+    )
     sys.exit(1)
 
 dispatcher = updater.dispatcher
-
 
 
 from Telegram.modules.helper_funcs.handlers import CustomCommandHandler

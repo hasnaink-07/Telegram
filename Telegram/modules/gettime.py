@@ -53,7 +53,8 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
 
     return result
 
-@zaid(command='time')
+
+@zaid(command="time")
 def gettime(update: Update, context: CallbackContext):
     message = update.effective_message
 
@@ -84,5 +85,6 @@ def gettime(update: Update, context: CallbackContext):
     send_message.edit_text(
         result, parse_mode=ParseMode.HTML, disable_web_page_preview=True
     )
+
 
 __mod_name__ = "Time"

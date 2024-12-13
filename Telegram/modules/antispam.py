@@ -26,8 +26,15 @@ from telegram import ParseMode, Update
 from telegram.error import BadRequest, TelegramError
 from telegram.ext import CallbackContext, Filters
 from telegram.utils.helpers import mention_html
-from spamwatch.errors import SpamWatchError, Error, UnauthorizedError, NotFoundError, Forbidden, TooManyRequests
-from  Telegram.modules.helper_funcs.decorators import zaid, zaidmsg
+from spamwatch.errors import (
+    SpamWatchError,
+    Error,
+    UnauthorizedError,
+    NotFoundError,
+    Forbidden,
+    TooManyRequests,
+)
+from Telegram.modules.helper_funcs.decorators import zaid, zaidmsg
 
 from ..modules.helper_funcs.anonymous import user_admin, AdminPerms
 
@@ -403,7 +410,14 @@ def check_and_ban(update, user_id, should_message=True):
         sw_ban = sw.get_ban(int(user_id))
     except AttributeError:
         sw_ban = None
-    except (SpamWatchError, Error, UnauthorizedError, NotFoundError, Forbidden, TooManyRequests) as e:
+    except (
+        SpamWatchError,
+        Error,
+        UnauthorizedError,
+        NotFoundError,
+        Forbidden,
+        TooManyRequests,
+    ) as e:
         log.warning(f" SpamWatch Error: {e}")
         sw_ban = None
 
@@ -431,13 +445,17 @@ def check_and_ban(update, user_id, should_message=True):
             update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-@zaidmsg((Filters.all & Filters.chat_type.groups), can_disable=False, group=GBAN_ENFORCE_GROUP)
+@zaidmsg(
+    (Filters.all & Filters.chat_type.groups),
+    can_disable=False,
+    group=GBAN_ENFORCE_GROUP,
+)
 def enforce_gban(update: Update, context: CallbackContext):
     # Not using @restrict handler to avoid spamming - just ignore if cant gban.
     bot = context.bot
     if (
-            sql.does_chat_gban(update.effective_chat.id)
-            and update.effective_chat.get_member(bot.id).can_restrict_members
+        sql.does_chat_gban(update.effective_chat.id)
+        and update.effective_chat.get_member(bot.id).can_restrict_members
     ):
         user = update.effective_user
         chat = update.effective_chat
@@ -507,7 +525,7 @@ def __user_info__(user_id):
         user = sql.get_gbanned_user(user_id)
         if user.reason:
             text += f"\n<b>Reason:</b> <code>{html.escape(user.reason)}</code>"
-        text += '\n<b>Appeal Chat:</b> @YorkTownEagleUnion'
+        text += "\n<b>Appeal Chat:</b> @YorkTownEagleUnion"
     else:
         text = text.format("No")
     return text
@@ -528,4 +546,4 @@ def get_help(chat):
     return gs(chat, "antispam_help")
 
 
-__mod_name__ = 'AntiSpam'
+__mod_name__ = "AntiSpam"

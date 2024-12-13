@@ -41,7 +41,9 @@ from ..modules.helper_funcs.anonymous import user_admin, AdminPerms
 FLOOD_GROUP = -5
 
 
-@zaidmsg((Filters.all & ~Filters.status_update & Filters.chat_type.groups), group=FLOOD_GROUP)
+@zaidmsg(
+    (Filters.all & ~Filters.status_update & Filters.chat_type.groups), group=FLOOD_GROUP
+)
 @connection_status
 @loggable
 def check_flood(update, context) -> Optional[str]:
@@ -54,9 +56,9 @@ def check_flood(update, context) -> Optional[str]:
 
     # ignore admins and whitelists
     if (
-            is_user_admin(update, user.id)
-            or user.id in WHITELIST_USERS
-            or user.id in SARDEGNA_USERS
+        is_user_admin(update, user.id)
+        or user.id in WHITELIST_USERS
+        or user.id in SARDEGNA_USERS
     ):
         sql.update_flood(chat.id, None)
         return ""
@@ -158,7 +160,7 @@ def flood_button(update: Update, context: CallbackContext):
             pass
 
 
-@zaid(command='setflood', pass_args=True, filters=Filters.chat_type.groups)
+@zaid(command="setflood", pass_args=True, filters=Filters.chat_type.groups)
 @connection_status
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @can_restrict

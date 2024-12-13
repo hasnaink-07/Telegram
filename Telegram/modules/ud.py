@@ -3,6 +3,7 @@ from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, run_async
 from Telegram.modules.helper_funcs.decorators import zaid
 
+
 @zaid(command=["ud", "urban"])
 def ud(update: Update, context: CallbackContext):
     message = update.effective_message

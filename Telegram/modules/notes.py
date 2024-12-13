@@ -72,7 +72,9 @@ def get(update, context, notename, show_none=True, no_format=False):
             if JOIN_LOGGER:
                 try:
                     bot.forward_message(
-                        chat_id=chat_id, from_chat_id=JOIN_LOGGER, message_id=note.value,
+                        chat_id=chat_id,
+                        from_chat_id=JOIN_LOGGER,
+                        message_id=note.value,
                     )
                 except BadRequest as excp:
                     if excp.message != "Message to forward not found":
@@ -85,7 +87,9 @@ def get(update, context, notename, show_none=True, no_format=False):
             else:
                 try:
                     bot.forward_message(
-                        chat_id=chat_id, from_chat_id=chat_id, message_id=note.value,
+                        chat_id=chat_id,
+                        from_chat_id=chat_id,
+                        message_id=note.value,
                     )
                 except BadRequest as excp:
                     if excp.message != "Message to forward not found":
@@ -108,7 +112,8 @@ def get(update, context, notename, show_none=True, no_format=False):
                 "mention",
             ]
             valid_format = escape_invalid_curly_brackets(
-                note.value, VALID_NOTE_FORMATTERS,
+                note.value,
+                VALID_NOTE_FORMATTERS,
             )
             if valid_format:
                 if not no_format and "%%%" in valid_format:
@@ -123,23 +128,34 @@ def get(update, context, notename, show_none=True, no_format=False):
                     ),
                     fullname=escape_markdown(
                         " ".join(
-                            [message.from_user.first_name, message.from_user.last_name]
-                            if message.from_user.last_name
-                            else [message.from_user.first_name],
+                            (
+                                [
+                                    message.from_user.first_name,
+                                    message.from_user.last_name,
+                                ]
+                                if message.from_user.last_name
+                                else [message.from_user.first_name]
+                            ),
                         ),
                     ),
-                    username="@" + message.from_user.username
-                    if message.from_user.username
-                    else mention_markdown(
-                        message.from_user.id, message.from_user.first_name,
+                    username=(
+                        "@" + message.from_user.username
+                        if message.from_user.username
+                        else mention_markdown(
+                            message.from_user.id,
+                            message.from_user.first_name,
+                        )
                     ),
                     mention=mention_markdown(
-                        message.from_user.id, message.from_user.first_name,
+                        message.from_user.id,
+                        message.from_user.first_name,
                     ),
                     chatname=escape_markdown(
-                        message.chat.title
-                        if message.chat.type != "private"
-                        else message.from_user.first_name,
+                        (
+                            message.chat.title
+                            if message.chat.type != "private"
+                            else message.from_user.first_name
+                        ),
                     ),
                     id=message.from_user.id,
                 )
@@ -203,7 +219,9 @@ def get(update, context, notename, show_none=True, no_format=False):
                         f"@Superior_Support if you can't figure out why!"
                     )
                     log.exception(
-                        "Could not parse message #%s in chat %s", notename, str(note_chat_id)
+                        "Could not parse message #%s in chat %s",
+                        notename,
+                        str(note_chat_id),
                     )
                     log.warning("Message was: %s", str(note.value))
         return
@@ -223,7 +241,6 @@ def cmd_get(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Get rekt")
 
 
-
 @zaidmsg((Filters.regex(r"^#[^\s]+")), group=-14)
 @connection_status
 def hash_get(update: Update, context: CallbackContext):
@@ -231,7 +248,6 @@ def hash_get(update: Update, context: CallbackContext):
     fst_word = message.split()[0]
     no_hash = fst_word[1:].lower()
     get(update, context, no_hash, show_none=False)
-
 
 
 @zaidmsg((Filters.regex(r"^/\d+$")), group=-16)
@@ -248,13 +264,14 @@ def slash_get(update: Update, context: CallbackContext):
     except IndexError:
         update.effective_message.reply_text("Wrong Note ID 😾")
 
-@zaid(command='save')
+
+@zaid(command="save")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @connection_status
 def save(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
-    m = msg.text.split(' ', 1)
+    m = msg.text.split(" ", 1)
     if len(m) == 1:
         msg.reply_text("Provide something to save.")
         return
@@ -290,7 +307,8 @@ def save(update: Update, context: CallbackContext):
             )
         return
 
-@zaid(command='clear')
+
+@zaid(command="clear")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @connection_status
 def clear(update: Update, context: CallbackContext):
@@ -307,7 +325,7 @@ def clear(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Provide a notename.")
 
 
-@zaid(command='removeallnotes')
+@zaid(command="removeallnotes")
 def clearall(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -509,7 +527,9 @@ def __chat_settings__(chat_id, user_id):
     notes = sql.get_all_chat_notes(chat_id)
     return f"There are `{len(notes)}` notes in this chat."
 
+
 from Telegram.modules.language import gs
+
 
 def get_help(chat):
     return gs(chat, "notes_help")

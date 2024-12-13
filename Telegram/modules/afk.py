@@ -8,6 +8,7 @@ from Telegram.modules.sql import afk_sql as sql
 from Telegram.modules.users import get_user_id
 from Telegram.modules.helper_funcs.decorators import zaid, zaidmsg
 
+
 @zaidmsg(Filters.regex("(?i)^brb"), friendly="afk", group=3)
 @zaid(command="afk", group=3)
 def afk(update: Update, context: CallbackContext):
@@ -36,7 +37,8 @@ def afk(update: Update, context: CallbackContext):
     except BadRequest:
         pass
 
-@zaidmsg((Filters.all & Filters.chat_type.groups), friendly='afk', group=1)
+
+@zaidmsg((Filters.all & Filters.chat_type.groups), friendly="afk", group=1)
 def no_longer_afk(update: Update, context: CallbackContext):
     user = update.effective_user
     message = update.effective_message
@@ -67,7 +69,15 @@ def no_longer_afk(update: Update, context: CallbackContext):
         except:
             return
 
-@zaidmsg((Filters.entity(MessageEntity.MENTION) | Filters.entity(MessageEntity.TEXT_MENTION) & Filters.chat_type.groups), friendly='afk', group=8)
+
+@zaidmsg(
+    (
+        Filters.entity(MessageEntity.MENTION)
+        | Filters.entity(MessageEntity.TEXT_MENTION) & Filters.chat_type.groups
+    ),
+    friendly="afk",
+    group=8,
+)
 def reply_afk(update: Update, context: CallbackContext):
     bot = context.bot
     message = update.effective_message
@@ -93,9 +103,7 @@ def reply_afk(update: Update, context: CallbackContext):
             if ent.type != MessageEntity.MENTION:
                 return
 
-            user_id = get_user_id(
-                message.text[ent.offset : ent.offset + ent.length]
-            )
+            user_id = get_user_id(message.text[ent.offset : ent.offset + ent.length])
             if not user_id:
                 # Should never happen, since for a user to become AFK they must have spoken. Maybe changed username?
                 return
@@ -107,11 +115,7 @@ def reply_afk(update: Update, context: CallbackContext):
             try:
                 chat = bot.get_chat(user_id)
             except BadRequest:
-                print(
-                    "Error: Could not fetch userid {} for AFK module".format(
-                        user_id
-                    )
-                )
+                print("Error: Could not fetch userid {} for AFK module".format(user_id))
                 return
             fst_name = chat.first_name
 
@@ -141,9 +145,12 @@ def check_afk(update, context, user_id, fst_name, userc_id):
 def __gdpr__(user_id):
     sql.rm_afk(user_id)
 
+
 from Telegram.modules.language import gs
+
 
 def get_help(chat):
     return gs(chat, "afk_help")
+
 
 __mod_name__ = "AFK"

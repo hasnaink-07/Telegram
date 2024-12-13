@@ -20,7 +20,7 @@ from Telegram import (
     INFOPIC,
     sw,
     StartTime,
-    ZInit as KInit
+    ZInit as KInit,
 )
 from Telegram.__main__ import STATS, USER_INFO, TOKEN
 from Telegram.modules.sql import SESSION
@@ -59,7 +59,8 @@ This will create two buttons on a single line, instead of one button per line.
 Keep in mind that your message <b>MUST</b> contain some text other than just a button!
 """
 
-@zaid(command='id', pass_args=True)
+
+@zaid(command="id", pass_args=True)
 def get_id(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
@@ -101,7 +102,8 @@ def get_id(update: Update, context: CallbackContext):
                 f"This group's id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
             )
 
-@zaid(command='gifid')
+
+@zaid(command="gifid")
 def gifid(update: Update, _):
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.animation:
@@ -112,7 +114,8 @@ def gifid(update: Update, _):
     else:
         update.effective_message.reply_text("Please reply to a gif to get its ID.")
 
-@zaid(command='info', pass_args=True)
+
+@zaid(command="info", pass_args=True)
 def info(update: Update, context: CallbackContext):  # sourcery no-metrics
     bot = context.bot
     args = context.args
@@ -177,28 +180,29 @@ def info(update: Update, context: CallbackContext):  # sourcery no-metrics
         if user_member.status == "administrator":
             result = bot.get_chat_member(chat.id, user.id)
             if result.custom_title:
-                text += f"\nThis user holds the title <b>{result.custom_title}</b> here."
+                text += (
+                    f"\nThis user holds the title <b>{result.custom_title}</b> here."
+                )
     except BadRequest:
         pass
 
-
     if user.id == OWNER_ID:
-        text += '\nThis person is my owner'
+        text += "\nThis person is my owner"
         Nation_level_present = True
     elif user.id in DEV_USERS:
-        text += '\nThis Person is a part of Eagle Union'
+        text += "\nThis Person is a part of Eagle Union"
         Nation_level_present = True
     elif user.id in SUDO_USERS:
-        text += '\nThe Nation level of this person is Royal'
+        text += "\nThe Nation level of this person is Royal"
         Nation_level_present = True
     elif user.id in SUPPORT_USERS:
-        text += '\nThe Nation level of this person is Sakura'
+        text += "\nThe Nation level of this person is Sakura"
         Nation_level_present = True
     elif user.id in SARDEGNA_USERS:
-        text += '\nThe Nation level of this person is Sardegna'
+        text += "\nThe Nation level of this person is Sardegna"
         Nation_level_present = True
     elif user.id in WHITELIST_USERS:
-        text += '\nThe Nation level of this person is Neptunia'
+        text += "\nThe Nation level of this person is Neptunia"
         Nation_level_present = True
 
     if Nation_level_present:
@@ -241,7 +245,8 @@ def info(update: Update, context: CallbackContext):  # sourcery no-metrics
             text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
         )
 
-@zaid(command='echo', pass_args=True, filters=Filters.chat_type.groups)
+
+@zaid(command="echo", pass_args=True, filters=Filters.chat_type.groups)
 @user_admin
 def echo(update: Update, _):
     args = update.effective_message.text.split(None, 1)
@@ -260,10 +265,13 @@ def shell(command):
     stdout, stderr = process.communicate()
     return (stdout, stderr)
 
-@zaid(command='markdownhelp', filters=Filters.chat_type.private)
+
+@zaid(command="markdownhelp", filters=Filters.chat_type.private)
 def markdown_help(update: Update, _):
     chat = update.effective_chat
-    update.effective_message.reply_text((gs(chat.id, "markdown_help_text")), parse_mode=ParseMode.HTML)
+    update.effective_message.reply_text(
+        (gs(chat.id, "markdown_help_text")), parse_mode=ParseMode.HTML
+    )
     update.effective_message.reply_text(
         "Try forwarding the following message to me, and you'll see!"
     )
@@ -272,6 +280,7 @@ def markdown_help(update: Update, _):
         "[URL](example.com) [button](buttonurl:github.com) "
         "[button2](buttonurl://google.com:same)"
     )
+
 
 def get_readable_time(seconds: int) -> str:
     count = 0
@@ -297,12 +306,17 @@ def get_readable_time(seconds: int) -> str:
 
     return ping_time
 
-stats_str = '''
-'''
-@zaid(command='stats', can_disable=False)
+
+stats_str = """
+"""
+
+
+@zaid(command="stats", can_disable=False)
 @sudo_plus
 def stats(update, context):
-    db_size = SESSION.execute("SELECT pg_size_pretty(pg_database_size(current_database()))").scalar_one_or_none()
+    db_size = SESSION.execute(
+        "SELECT pg_size_pretty(pg_database_size(current_database()))"
+    ).scalar_one_or_none()
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╒═══「 System statistics: 」*\n\n"
@@ -323,21 +337,21 @@ def stats(update, context):
     status += "*• python-telegram-bot:* " + str(ptbver) + "\n"
     status += "*• Uptime:* " + str(botuptime) + "\n"
     status += "*• Database size:* " + str(db_size) + "\n"
-    kb = [
-          [
-           InlineKeyboardButton('Ping', callback_data='pingCB')
-          ]
-    ]
+    kb = [[InlineKeyboardButton("Ping", callback_data="pingCB")]]
     repo = git.Repo(search_parent_directories=True)
     sha = repo.head.object.hexsha
     status += f"*• Commit*: `{sha[0:9]}`\n"
     try:
-        update.effective_message.reply_text(status +
-            "\n*Bot statistics*:\n"
-            + "\n".join([mod.__stats__() for mod in STATS]) +
-            "\n\n[⍙ GitHub](https://github.com/ITZ-ZAID) | [⍚ GitLab](https://gitlab.com/ITZ-ZAID)\n\n" +
-            "╘══「 by [Zaid](https://t.me/Timesisnotwaiting) 」\n",
-        parse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup(kb), disable_web_page_preview=True)
+        update.effective_message.reply_text(
+            status
+            + "\n*Bot statistics*:\n"
+            + "\n".join([mod.__stats__() for mod in STATS])
+            + "\n\n[⍙ GitHub](https://github.com/ITZ-ZAID) | [⍚ GitLab](https://gitlab.com/ITZ-ZAID)\n\n"
+            + "╘══「 by [Zaid](https://t.me/Timesisnotwaiting) 」\n",
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(kb),
+            disable_web_page_preview=True,
+        )
     except BaseException:
         update.effective_message.reply_text(
             (
@@ -355,7 +369,8 @@ def stats(update, context):
             disable_web_page_preview=True,
         )
 
-@zaid(command='ping')
+
+@zaid(command="ping")
 def ping(update: Update, _):
     msg = update.effective_message
     start_time = time.time()
@@ -367,19 +382,18 @@ def ping(update: Update, _):
     )
 
 
-@zaidcallback(pattern=r'^pingCB')
+@zaidcallback(pattern=r"^pingCB")
 def pingCallback(update: Update, context: CallbackContext):
     query = update.callback_query
     start_time = time.time()
-    requests.get('https://api.telegram.org')
+    requests.get("https://api.telegram.org")
     end_time = time.time()
     ping_time = round((end_time - start_time) * 1000, 3)
-    query.answer('Pong! {}ms'.format(ping_time))
+    query.answer("Pong! {}ms".format(ping_time))
 
 
 def get_help(chat):
     return gs(chat, "misc_help")
-
 
 
 __mod_name__ = "Misc"

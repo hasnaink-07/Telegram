@@ -4,7 +4,8 @@ from telegram.ext import CallbackContext
 from Telegram.modules.helper_funcs.decorators import zaid
 from io import BytesIO
 
-@zaid(command='paste', pass_args=True)
+
+@zaid(command="paste", pass_args=True)
 def paste(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message
@@ -23,7 +24,7 @@ def paste(update: Update, context: CallbackContext):
     else:
         message.reply_text("What am I supposed to do with this?")
         return
-    
+
     txt = ""
     paste_url = upload_text(data)
     if not paste_url:

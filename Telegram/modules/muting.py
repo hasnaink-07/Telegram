@@ -28,7 +28,7 @@ def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
     try:
         member = update.effective_chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == 'User not found':
+        if excp.message == "User not found":
             return "I can't seem to find this user"
         else:
             raise
@@ -41,7 +41,7 @@ def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
     return None
 
 
-@zaid(command='mute')
+@zaid(command="mute")
 @connection_status
 @bot_admin
 @can_restrict
@@ -80,8 +80,10 @@ def mute(update: Update, context: CallbackContext) -> str:
         bot.sendMessage(
             chat.id,
             "{} was muted by {} in <b>{}</b>\n<b>Reason</b>: <code>{}</code>".format(
-                mention_html(member.user.id, member.user.first_name), mention_html(user.id, user.first_name),
-                message.chat.title, reason
+                mention_html(member.user.id, member.user.first_name),
+                mention_html(user.id, user.first_name),
+                message.chat.title,
+                reason,
             ),
             parse_mode=ParseMode.HTML,
         )
@@ -93,7 +95,7 @@ def mute(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-@zaid(command='unmute')
+@zaid(command="unmute")
 @connection_status
 @bot_admin
 @can_restrict
@@ -121,10 +123,10 @@ def unmute(update: Update, context: CallbackContext) -> str:
         )
 
     elif (
-            member.can_send_messages
-            and member.can_send_media_messages
-            and member.can_send_other_messages
-            and member.can_add_web_page_previews
+        member.can_send_messages
+        and member.can_send_media_messages
+        and member.can_send_other_messages
+        and member.can_add_web_page_previews
     ):
         message.reply_text("This user already has the right to speak.")
     else:
@@ -145,8 +147,10 @@ def unmute(update: Update, context: CallbackContext) -> str:
         bot.sendMessage(
             chat.id,
             "{} was unmuted by {} in <b>{}</b>\n<b>Reason</b>: <code>{}</code>".format(
-                mention_html(member.user.id, member.user.first_name), mention_html(user.id, user.first_name),
-                message.chat.title, reason
+                mention_html(member.user.id, member.user.first_name),
+                mention_html(user.id, user.first_name),
+                message.chat.title,
+                reason,
             ),
             parse_mode=ParseMode.HTML,
         )
@@ -159,7 +163,7 @@ def unmute(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-@zaid(command=['tmute', 'tempmute'])
+@zaid(command=["tmute", "tempmute"])
 @connection_status
 @bot_admin
 @can_restrict

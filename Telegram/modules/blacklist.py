@@ -7,7 +7,10 @@ from telegram.utils.helpers import mention_html
 from Telegram.modules.sql.approve_sql import is_approved
 import Telegram.modules.sql.blacklist_sql as sql
 from Telegram import log, dispatcher
-from Telegram.modules.helper_funcs.chat_status import user_admin as u_admin, user_not_admin
+from Telegram.modules.helper_funcs.chat_status import (
+    user_admin as u_admin,
+    user_not_admin,
+)
 from Telegram.modules.helper_funcs.extraction import extract_text
 from Telegram.modules.helper_funcs.misc import split_message
 from Telegram.modules.log_channel import loggable
@@ -20,6 +23,7 @@ from Telegram.modules.helper_funcs.alternate import send_message, typing_action
 from ..modules.helper_funcs.anonymous import user_admin, AdminPerms
 
 BLACKLIST_GROUP = -3
+
 
 @zaid(command="blacklist", pass_args=True, admin_ok=True)
 @u_admin
@@ -65,6 +69,7 @@ def blacklist(update, context):
             return
         send_message(update.effective_message, text, parse_mode=ParseMode.HTML)
 
+
 @zaid(command="addblacklist", pass_args=True)
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
 @typing_action
@@ -89,11 +94,7 @@ def add_blacklist(update, context):
     if len(words) > 1:
         text = words[1]
         to_blacklist = list(
-            {
-                trigger.strip()
-                for trigger in text.split("\n")
-                if trigger.strip()
-            }
+            {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
         )
 
         for trigger in to_blacklist:
@@ -123,6 +124,7 @@ def add_blacklist(update, context):
             "Tell me which words you would like to add in blacklist.",
         )
 
+
 @zaid(command="unblacklist", pass_args=True)
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
 @typing_action
@@ -147,11 +149,7 @@ def unblacklist(update, context):
     if len(words) > 1:
         text = words[1]
         to_unblacklist = list(
-            {
-                trigger.strip()
-                for trigger in text.split("\n")
-                if trigger.strip()
-            }
+            {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
         )
 
         successful = 0
@@ -206,6 +204,7 @@ def unblacklist(update, context):
             update.effective_message,
             "Tell me which words you would like to remove from blacklist!",
         )
+
 
 @zaid(command="blacklistmode", pass_args=True)
 @loggable
@@ -340,8 +339,13 @@ def findall(p, s):
         i = s.find(p, i + 1)
 
 
-
-@zaidmsg(((Filters.text | Filters.command | Filters.sticker | Filters.photo) & Filters.chat_type.groups), group=BLACKLIST_GROUP)
+@zaidmsg(
+    (
+        (Filters.text | Filters.command | Filters.sticker | Filters.photo)
+        & Filters.chat_type.groups
+    ),
+    group=BLACKLIST_GROUP,
+)
 @user_not_admin
 def del_blacklist(update, context):  # sourcery no-metrics
     chat = update.effective_chat
@@ -457,6 +461,7 @@ def __stats__():
 __mod_name__ = "Blacklists"
 
 from Telegram.modules.language import gs
+
 
 def get_help(chat):
     return gs(chat, "blacklist_help")

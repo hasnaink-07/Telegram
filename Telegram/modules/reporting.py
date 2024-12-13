@@ -20,7 +20,7 @@ REPORT_GROUP = 12
 REPORT_IMMUNE_USERS = SUDO_USERS + SARDEGNA_USERS + WHITELIST_USERS
 
 
-@zaid(command='reports')
+@zaid(command="reports")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 def report_setting(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
@@ -64,7 +64,7 @@ def report_setting(update: Update, context: CallbackContext):
         )
 
 
-@zaid(command='report', filters=Filters.chat_type.groups, group=REPORT_GROUP)
+@zaid(command="report", filters=Filters.chat_type.groups, group=REPORT_GROUP)
 @zaidmsg((Filters.regex(r"(?i)@admin(s)?")), group=REPORT_GROUP)
 @user_not_admin
 @loggable
@@ -76,12 +76,14 @@ def report(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
-    
+
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
-        logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
+        logsql.set_chat_setting(
+            logsql.LogChannelSettings(chat.id, True, True, True, True, True)
+        )
         log_setting = logsql.get_chat_setting(chat.id)
-        
+
     if message.sender_chat:
         admin_list = bot.getChatAdministrators(chat.id)
         reported = "Reported to admins."
@@ -89,7 +91,7 @@ def report(update: Update, context: CallbackContext) -> str:
             if admin.user.is_bot:  # AI didnt take over yet
                 continue
             try:
-                reported += f"<a href=\"tg://user?id={admin.user.id}\">\u2063</a>"
+                reported += f'<a href="tg://user?id={admin.user.id}">\u2063</a>'
             except BadRequest:
                 log.exception("Exception while reporting user")
         message.reply_text(reported, parse_mode=ParseMode.HTML)
@@ -177,7 +179,7 @@ def report(update: Update, context: CallbackContext) -> str:
                             message.reply_to_message.forward(admin.user.id)
 
                             if (
-                                    len(message.text.split()) > 1
+                                len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
                                 message.forward(admin.user.id)
                     if not chat.username:
@@ -189,7 +191,7 @@ def report(update: Update, context: CallbackContext) -> str:
                             message.reply_to_message.forward(admin.user.id)
 
                             if (
-                                    len(message.text.split()) > 1
+                                len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
                                 message.forward(admin.user.id)
 
@@ -205,7 +207,7 @@ def report(update: Update, context: CallbackContext) -> str:
                             message.reply_to_message.forward(admin.user.id)
 
                             if (
-                                    len(message.text.split()) > 1
+                                len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
                                 message.forward(admin.user.id)
 
@@ -216,7 +218,8 @@ def report(update: Update, context: CallbackContext) -> str:
 
         try:
             update.effective_message.reply_sticker(
-                "CAACAgUAAx0CRSKHWwABAXGoYB2UJauytkH4RJWSStz9DTlxQg0AAlcHAAKAUF41_sNx9Y1z2DQeBA")
+                "CAACAgUAAx0CRSKHWwABAXGoYB2UJauytkH4RJWSStz9DTlxQg0AAlcHAAKAUF41_sNx9Y1z2DQeBA"
+            )
         except:
             pass
         message.reply_to_message.reply_text(

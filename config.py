@@ -6,6 +6,8 @@ if os.path.exists("local.env"):
     load_dotenv("local.env")
 
 load_dotenv()
+
+
 class Config(object):
     log = True
     APP_ID = getenv("API_ID", "6435225")
@@ -13,7 +15,7 @@ class Config(object):
     TOKEN = getenv("TOKEN", "")
     OWNER_ID = getenv("OWNER_ID", "")
     ASSISTANT_ID = getenv("ASSISTANT_ID", "")
-    STRING_SESSION = getenv("STRING_SESSION", "") #telethon
+    STRING_SESSION = getenv("STRING_SESSION", "")  # telethon
     OWNER_USERNAME = getenv("OWNER_USERNAME", "")
     DB_URI = getenv("DATABASE_URL", "")
     DB_URI = DB_URI.replace("postgres", "postgresql")
@@ -37,9 +39,15 @@ class Config(object):
     CUSTOM_CMD = False
     CHANNEL = getenv("CHANNEL", "TheUpdatesChannel")
     SUPPORT = getenv("SUPPORT", "TheSupportChat")
-    START_IMG = os.environ.get("START_IMG", "https://telegra.ph/file/35a7b5d9f1f2605c9c0d3.png")
-    CMD_IMG = os.environ.get("CMD_IMG", "https://telegra.ph/file/66518ed54301654f0b126.png")
-    CASH_API_KEY = getenv("CASH_API_KEY", "https://www.alphavantage.co/support/#api-key")
+    START_IMG = os.environ.get(
+        "START_IMG", "https://telegra.ph/file/35a7b5d9f1f2605c9c0d3.png"
+    )
+    CMD_IMG = os.environ.get(
+        "CMD_IMG", "https://telegra.ph/file/66518ed54301654f0b126.png"
+    )
+    CASH_API_KEY = getenv(
+        "CASH_API_KEY", "https://www.alphavantage.co/support/#api-key"
+    )
     TIME_API_KEY = getenv("TIME_API_KEY", "https://timezonedb.com/api")
     WALL_API = getenv("WALL_API", "https://wall.alphacoders.com/api.php")
     spamwatch_api = getenv("spamwatch_api", "https://t.me/SpamWatchBot")

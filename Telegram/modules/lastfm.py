@@ -9,7 +9,8 @@ from Telegram import LASTFM_API_KEY
 from Telegram.modules.helper_funcs.decorators import zaid
 import Telegram.modules.sql.last_fm_sql as sql
 
-@zaid(command='setuser')
+
+@zaid(command="setuser")
 def set_user(update: Update, context: CallbackContext):
     args = context.args
     msg = update.effective_message
@@ -23,7 +24,8 @@ def set_user(update: Update, context: CallbackContext):
             "That's not how this works...\nRun /setuser followed by your username!"
         )
 
-@zaid(command='clearuser')
+
+@zaid(command="clearuser")
 def clear_user(update: Update, _):
     user = update.effective_user.id
     sql.set_user(user, "")
@@ -31,7 +33,8 @@ def clear_user(update: Update, _):
         "Last.fm username successfully cleared from my database!"
     )
 
-@zaid(command='lastfm')
+
+@zaid(command="lastfm")
 def last_fm(update: Update, _):
     msg = update.effective_message
     user = update.effective_user.first_name

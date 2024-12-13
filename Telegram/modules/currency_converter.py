@@ -4,7 +4,8 @@ from telegram import Update, ParseMode
 from telegram.ext import CallbackContext
 from Telegram.modules.helper_funcs.decorators import zaid
 
-@zaid(command='cash')
+
+@zaid(command="cash")
 def convert(update: Update, context: CallbackContext):
     args = update.effective_message.text.split(" ")
 
@@ -48,7 +49,8 @@ def convert(update: Update, context: CallbackContext):
             f"*Invalid Args!!:* Required 3 But Passed {len(args) -1}",
             parse_mode=ParseMode.MARKDOWN,
         )
-        
+
+
 __help__ = """
  - /cash : currency converter
  example syntax: /cash 1 USD INR

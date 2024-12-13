@@ -209,7 +209,8 @@ reactions = [
     "(∩ᄑ_ᄑ)⊃━☆ﾟ*･｡*･:≡( ε:)",
 ]
 
-@zaid(command='react')
+
+@zaid(command="react")
 def react(update: Update, context: CallbackContext):
     message = update.effective_message
     react = random.choice(reactions)

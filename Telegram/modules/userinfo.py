@@ -10,7 +10,7 @@ from Telegram.modules.helper_funcs.decorators import zaid
 from Telegram.modules.helper_funcs.extraction import extract_user
 
 
-@zaid(command='me', pass_args=True)
+@zaid(command="me", pass_args=True)
 def about_me(update: Update, context: CallbackContext):
     args = context.args
     bot = context.bot
@@ -36,7 +36,7 @@ def about_me(update: Update, context: CallbackContext):
         )
 
 
-@zaid(command='setme')
+@zaid(command="setme")
 def set_about_me(update: Update, context: CallbackContext):
     bot = context.bot
     message = update.effective_message
@@ -68,7 +68,7 @@ def set_about_me(update: Update, context: CallbackContext):
             )
 
 
-@zaid(command='bio', pass_args=True)
+@zaid(command="bio", pass_args=True)
 def about_bio(update: Update, context: CallbackContext):
     args = context.args
     bot = context.bot
@@ -106,9 +106,9 @@ def about_bio(update: Update, context: CallbackContext):
         sender_id = update.effective_user.id
 
         if (
-                user_id == bot.id
-                and sender_id not in SUDO_USERS
-                and sender_id not in DEV_USERS
+            user_id == bot.id
+            and sender_id not in SUDO_USERS
+            and sender_id not in DEV_USERS
         ):
             message.reply_text(
                 "Erm... yeah, I only trust sudo users or developers to set my bio."
@@ -135,7 +135,7 @@ def about_bio(update: Update, context: CallbackContext):
         message.reply_text("Reply to someone's message to set their bio!")
 
 
-@zaid(command='setbio')
+@zaid(command="setbio")
 def set_about_bio(update: Update, context: CallbackContext):
     message = update.effective_message
     sender_id = update.effective_user.id

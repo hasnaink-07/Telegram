@@ -5,12 +5,15 @@ from sys import argv
 from typing import Optional
 
 from telegram import Update, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.error import (TelegramError, Unauthorized, BadRequest,
-                            TimedOut, ChatMigrated, NetworkError)
-from telegram.ext import (
-    CallbackContext,
-    Filters
+from telegram.error import (
+    TelegramError,
+    Unauthorized,
+    BadRequest,
+    TimedOut,
+    ChatMigrated,
+    NetworkError,
 )
+from telegram.ext import CallbackContext, Filters
 from telegram.ext.dispatcher import DispatcherHandlerStop
 from telegram.utils.helpers import escape_markdown
 
@@ -27,9 +30,10 @@ from Telegram import (
     URL,
     log,
     telethn,
-    AnieINIT
+    AnieINIT,
 )
 from config import Config
+
 CHANNEL = Config.CHANNEL
 SUPPORT = Config.SUPPORT
 
@@ -109,7 +113,7 @@ def send_help(chat_id, text, keyboard=None):
     )
 
 
-@zaid(command='text')
+@zaid(command="text")
 def test(update: Update, _: CallbackContext):
     """#TODO
 
@@ -123,8 +127,8 @@ def test(update: Update, _: CallbackContext):
     print(update.effective_message)
 
 
-@zaidcallback(pattern=r'start_back')
-@zaid(command='start', pass_args=True)
+@zaidcallback(pattern=r"start_back")
+@zaid(command="start", pass_args=True)
 def start(update: Update, context: CallbackContext):  # sourcery no-metrics
     """#TODO
 
@@ -135,9 +139,9 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
     chat = update.effective_chat
     args = context.args
 
-    if hasattr(update, 'callback_query'):
+    if hasattr(update, "callback_query"):
         query = update.callback_query
-        if hasattr(query, 'id'):
+        if hasattr(query, "id"):
             first_name = update.effective_user.first_name
             update.effective_message.edit_text(
                 text=gs(chat.id, "pm_start_text").format(
@@ -148,10 +152,12 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    [ 
+                    [
                         [
                             InlineKeyboardButton(
-                                text=gs(chat.id, "add_bot_to_group_btn").format(context.bot.first_name),
+                                text=gs(chat.id, "add_bot_to_group_btn").format(
+                                    context.bot.first_name
+                                ),
                                 url="t.me/{}?startgroup=true".format(
                                     context.bot.username
                                 ),
@@ -160,7 +166,7 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                         [
                             InlineKeyboardButton(
                                 text=gs(chat.id, "owner_btn"),
-                                url=f'https://t.me/{OWNER_USERNAME}',
+                                url=f"https://t.me/{OWNER_USERNAME}",
                             ),
                             InlineKeyboardButton(
                                 text=gs(chat.id, "source_btn"),
@@ -170,7 +176,7 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                         [
                             InlineKeyboardButton(
                                 text=gs(chat.id, "support_chat_link_btn"),
-                                url=f'https://t.me/{SUPPORT}',
+                                url=f"https://t.me/{SUPPORT}",
                             ),
                             InlineKeyboardButton(
                                 text="Help",
@@ -205,7 +211,12 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                     help_buttons = help_list[1:]
                 elif isinstance(help_list, str):
                     help_text = help_list
-                text = "Here is the help for the *{}* module:\n".format(HELPABLE[mod].__mod_name__) + help_text
+                text = (
+                    "Here is the help for the *{}* module:\n".format(
+                        HELPABLE[mod].__mod_name__
+                    )
+                    + help_text
+                )
                 help_buttons.append(
                     [InlineKeyboardButton(text="Back", callback_data="help_back")]
                 )
@@ -247,7 +258,9 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                     [
                         [
                             InlineKeyboardButton(
-                                text=gs(chat.id, "add_bot_to_group_btn").format(context.bot.first_name),
+                                text=gs(chat.id, "add_bot_to_group_btn").format(
+                                    context.bot.first_name
+                                ),
                                 url="t.me/{}?startgroup=true".format(
                                     context.bot.username
                                 ),
@@ -256,7 +269,7 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                         [
                             InlineKeyboardButton(
                                 text=gs(chat.id, "owner_btn"),
-                                url=f'https://t.me/{OWNER_USERNAME}',
+                                url=f"https://t.me/{OWNER_USERNAME}",
                             ),
                             InlineKeyboardButton(
                                 text=gs(chat.id, "source_btn"),
@@ -266,7 +279,7 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
                         [
                             InlineKeyboardButton(
                                 text=gs(chat.id, "support_chat_link_btn"),
-                                url=f'https://t.me/{SUPPORT}',
+                                url=f"https://t.me/{SUPPORT}",
                             ),
                             InlineKeyboardButton(
                                 text="Help",
@@ -284,9 +297,9 @@ def start(update: Update, context: CallbackContext):  # sourcery no-metrics
     else:
         update.effective_message.reply_text(gs(chat.id, "grp_start_text"))
 
-    if hasattr(update, 'callback_query'):
+    if hasattr(update, "callback_query"):
         query = update.callback_query
-        if hasattr(query, 'id'):
+        if hasattr(query, "id"):
             context.bot.answer_callback_query(query.id)
 
 
@@ -318,7 +331,7 @@ def error_callback(_, context: CallbackContext):
         # handle all other telegram related errors
 
 
-@zaidcallback(pattern=r'help_')
+@zaidcallback(pattern=r"help_")
 def help_button(update: Update, context: CallbackContext):
     """#TODO
 
@@ -347,10 +360,10 @@ def help_button(update: Update, context: CallbackContext):
                 help_text = help_list
                 help_buttons = []
             text = (
-                    "Here is the help for the *{}* module:\n".format(
-                        HELPABLE[module].__mod_name__
-                    )
-                    + help_text
+                "Here is the help for the *{}* module:\n".format(
+                    HELPABLE[module].__mod_name__
+                )
+                + help_text
             )
             help_buttons.append(
                 [InlineKeyboardButton(text="Back", callback_data="help_back")]
@@ -398,14 +411,14 @@ def help_button(update: Update, context: CallbackContext):
         pass
 
 
-@zaid(command='help')
+@zaid(command="help")
 def get_help(update: Update, context: CallbackContext):
-    '''#TODO
+    """#TODO
 
     Params:
         update  -
         context -
-    '''
+    """
 
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
@@ -464,7 +477,12 @@ def get_help(update: Update, context: CallbackContext):
                 help_buttons = help_list[1:]
             elif isinstance(help_list, str):
                 help_text = help_list
-            text = "Here is the available help for the *{}* module:\n".format(HELPABLE[module].__mod_name__) + help_text
+            text = (
+                "Here is the available help for the *{}* module:\n".format(
+                    HELPABLE[module].__mod_name__
+                )
+                + help_text
+            )
             help_buttons.append(
                 [InlineKeyboardButton(text="Go Back", callback_data="help_back")]
             )
@@ -483,13 +501,13 @@ def get_help(update: Update, context: CallbackContext):
 
 
 def send_settings(chat_id: int, user_id: int, user=False):
-    '''#TODO
+    """#TODO
 
     Params:
         chat_id -
         user_id -
         user    -
-    '''
+    """
 
     if user:
         if USER_SETTINGS:
@@ -532,12 +550,12 @@ def send_settings(chat_id: int, user_id: int, user=False):
 
 @zaidcallback(pattern=r"stngs_")
 def settings_button(update: Update, context: CallbackContext):
-    '''#TODO
+    """#TODO
 
     Params:
         update: Update           -
         context: CallbackContext -
-    '''
+    """
 
     query = update.callback_query
     user = update.effective_user
@@ -602,7 +620,7 @@ def settings_button(update: Update, context: CallbackContext):
             chat = bot.get_chat(chat_id)
             query.message.reply_text(
                 text="Hi there! There are quite a few settings for {} - go ahead and pick what "
-                     "you're interested in.".format(escape_markdown(chat.title)),
+                "you're interested in.".format(escape_markdown(chat.title)),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
@@ -614,21 +632,21 @@ def settings_button(update: Update, context: CallbackContext):
         query.message.delete()
     except BadRequest as excp:
         if excp.message not in [
-            'Message is not modified',
-            'Query_id_invalid',
+            "Message is not modified",
+            "Query_id_invalid",
             "Message can't be deleted",
         ]:
-            log.exception('Exception in settings buttons. %s', str(query.data))
+            log.exception("Exception in settings buttons. %s", str(query.data))
 
 
-@zaid(command='settings')
+@zaid(command="settings")
 def get_settings(update: Update, context: CallbackContext):
-    '''#TODO
+    """#TODO
 
     Params:
         update: Update           -
         context: CallbackContext -
-    '''
+    """
 
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -659,7 +677,7 @@ def get_settings(update: Update, context: CallbackContext):
         text = "Click here to check your settings."
 
 
-@zaid(command='donate')
+@zaid(command="donate")
 def donate(update: Update, _: CallbackContext):
     """#TODO
 
@@ -668,7 +686,9 @@ def donate(update: Update, _: CallbackContext):
         context: CallbackContext -
     """
 
-    update.effective_message.reply_text("can Donate Via \n Razorpay 👉 https://pages.razorpay.com/GODFATHERDONATIONS \n PayPal 👉 https://www.paypal.com/paypalme/mrakki58 for more Contact in @Godfatherakki!  >_<")
+    update.effective_message.reply_text(
+        "can Donate Via \n Razorpay 👉 https://pages.razorpay.com/GODFATHERDONATIONS \n PayPal 👉 https://www.paypal.com/paypalme/mrakki58 for more Contact in @Godfatherakki!  >_<"
+    )
 
 
 @zaidmsg(Filters.status_update.migrate)
@@ -715,7 +735,12 @@ def main():
         AnieINIT.bot_id = dispatcher.bot.id
         AnieINIT.bot_username = dispatcher.bot.username
         AnieINIT.bot_name = dispatcher.bot.first_name
-        updater.start_polling(timeout=15, read_latency=4, allowed_updates=Update.ALL_TYPES, drop_pending_updates=ZInit.DROP_UPDATES)
+        updater.start_polling(
+            timeout=15,
+            read_latency=4,
+            allowed_updates=Update.ALL_TYPES,
+            drop_pending_updates=ZInit.DROP_UPDATES,
+        )
     if len(argv) not in (1, 3, 4):
         telethn.disconnect()
     else:

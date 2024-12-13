@@ -19,7 +19,7 @@ from Telegram.modules.helper_funcs.decorators import zaid
 from ..modules.helper_funcs.anonymous import user_admin, AdminPerms
 
 
-@zaid(command='rules', filters=Filters.chat_type.groups)
+@zaid(command="rules", filters=Filters.chat_type.groups)
 def get_rules(update: Update, _: CallbackContext):
     chat_id = update.effective_chat.id
     send_rules(update, chat_id)
@@ -57,13 +57,13 @@ def send_rules(update, chat_id, from_pm=False):
         )
     elif rules:
         btn = InlineKeyboardMarkup(
+            [
                 [
-                    [
-                        InlineKeyboardButton(
-                            text="Rules", url=f"t.me/{bot.username}?start={chat_id}"
-                        )
-                    ]
+                    InlineKeyboardButton(
+                        text="Rules", url=f"t.me/{bot.username}?start={chat_id}"
+                    )
                 ]
+            ]
         )
         txt = "Please click the button below to see the rules."
         if not message.reply_to_message:
@@ -78,7 +78,7 @@ def send_rules(update, chat_id, from_pm=False):
         )
 
 
-@zaid(command='setrules', filters=Filters.chat_type.groups)
+@zaid(command="setrules", filters=Filters.chat_type.groups)
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 def set_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
@@ -96,7 +96,7 @@ def set_rules(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Successfully set rules for this group.")
 
 
-@zaid(command='clearrules', filters=Filters.chat_type.groups)
+@zaid(command="clearrules", filters=Filters.chat_type.groups)
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 def clear_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id

@@ -10,7 +10,7 @@ from Telegram.modules.helper_funcs.chat_status import (
     can_restrict,
     is_user_admin,
     user_admin_no_reply,
-    is_anon
+    is_anon,
 )
 from Telegram.modules.helper_funcs.extraction import (
     extract_text,
@@ -52,7 +52,7 @@ CURRENT_WARNING_FILTER_STRING = "<b>Current warning filters in this chat:</b>\n"
 
 # Not async
 def warn(
-        user: User, update: Update, reason: str, message: Message, warner: User = None
+    user: User, update: Update, reason: str, message: Message, warner: User = None
 ) -> Optional[str]:  # sourcery no-metrics
     chat = update.effective_chat
     if is_user_admin(update, user.id):
@@ -173,7 +173,11 @@ def button(update: Update, context: CallbackContext) -> str:
         res = sql.remove_warn(user_id, chat.id)
         if res:
             update.effective_message.edit_text(
-                "Warn removed by {}.".format(mention_html(user.id, user.first_name) if not is_anon(user, chat) else "anon admin"),
+                "Warn removed by {}.".format(
+                    mention_html(user.id, user.first_name)
+                    if not is_anon(user, chat)
+                    else "anon admin"
+                ),
                 parse_mode=ParseMode.HTML,
             )
             user_member = chat.get_member(user_id)
@@ -183,7 +187,6 @@ def button(update: Update, context: CallbackContext) -> str:
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}\n"
                 f"<b>User ID:</b> <code>{user_member.user.id}</code>"
-                
             )
         else:
             update.effective_message.edit_text(
@@ -206,8 +209,8 @@ def warn_user(update: Update, context: CallbackContext) -> str:
 
     if user_id:
         if (
-                message.reply_to_message
-                and message.reply_to_message.from_user.id == user_id
+            message.reply_to_message
+            and message.reply_to_message.from_user.id == user_id
         ):
             return warn(
                 message.reply_to_message.from_user,
@@ -507,7 +510,9 @@ def get_help(chat):
 
 __mod_name__ = "Warnings"
 
-WARN_HANDLER = CommandHandler(["warn", "dwarn", "swarn"], warn_user, filters=Filters.chat_type.groups)
+WARN_HANDLER = CommandHandler(
+    ["warn", "dwarn", "swarn"], warn_user, filters=Filters.chat_type.groups
+)
 RESET_WARN_HANDLER = CommandHandler(
     ["resetwarn", "resetwarns"], reset_warns, filters=Filters.chat_type.groups
 )

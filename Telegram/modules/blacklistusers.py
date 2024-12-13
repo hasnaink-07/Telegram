@@ -24,7 +24,8 @@ BLACKLISTWHITELIST = (
 )
 BLABLEUSERS = [OWNER_ID] + DEV_USERS
 
-@zaid(command=['ignore', 'addblocklist'], pass_args=True)
+
+@zaid(command=["ignore", "addblocklist"], pass_args=True)
 @dev_plus
 @gloggable
 def bl_user(update: Update, context: CallbackContext) -> str:
@@ -48,10 +49,10 @@ def bl_user(update: Update, context: CallbackContext) -> str:
     try:
         target_user = bot.get_chat(user_id)
     except BadRequest as excp:
-        if excp.message != 'User not found':
+        if excp.message != "User not found":
             raise
         message.reply_text("I can't seem to find this user.")
-        return ''
+        return ""
     sql.blacklist_user(user_id, reason)
     message.reply_text("I shall ignore the existence of this user!")
     log_message = (
@@ -64,7 +65,8 @@ def bl_user(update: Update, context: CallbackContext) -> str:
 
     return log_message
 
-@zaid(command='notice', pass_args=True)
+
+@zaid(command="notice", pass_args=True)
 @dev_plus
 @gloggable
 def unbl_user(update: Update, context: CallbackContext) -> str:
@@ -106,7 +108,8 @@ def unbl_user(update: Update, context: CallbackContext) -> str:
         message.reply_text("I am not ignoring them at all though!")
         return ""
 
-@zaid(command='ignoredlist', pass_args=True)
+
+@zaid(command="ignoredlist", pass_args=True)
 @dev_plus
 def bl_users(update: Update, context: CallbackContext):
     users = []
@@ -150,5 +153,6 @@ def __user_info__(user_id):
         text = text.format("No")
 
     return text
+
 
 __mod_name__ = "Blacklisting Users"
